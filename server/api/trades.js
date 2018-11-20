@@ -10,3 +10,21 @@ router.get('/', async (req, res, next) => {
     next(err);
   }
 });
+
+router.get('/:tradeId', async (req, res, next) => {
+  try {
+    const singleTrade = await Stock.findById(req.params.tradeId);
+    res.json(singleTrade);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.post('/', async (req, res, next) => {
+  try {
+    const newTrade = await Trade.create(req.body);
+    res.json(newTrade);
+  } catch (err) {
+    next(err);
+  }
+});

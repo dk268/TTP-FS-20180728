@@ -20,6 +20,7 @@ router.get('/:userId/stocks', async (req, res, next) => {
       where: {
         id: req.params.userId,
       },
+      order: ['stockName', 'asc'],
     });
     res.json(stocks);
   } catch (err) {
@@ -33,6 +34,7 @@ router.get('/:userId/trades', async (req, res, next) => {
       where: {
         id: req.params.userId,
       },
+      order: ['createdAt', 'desc'],
     });
     res.json(trades);
   } catch (err) {

@@ -10,3 +10,21 @@ router.get('/', async (req, res, next) => {
     next(err);
   }
 });
+
+router.get('/:stockId', async (req, res, next) => {
+  try {
+    const singleStock = await Stock.findById(req.params.stockId);
+    res.json(singleStock);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.post('/', async (req, res, next) => {
+  try {
+    const newStock = await Stock.create(req.body);
+    res.json(newStock);
+  } catch (err) {
+    next(err);
+  }
+});
