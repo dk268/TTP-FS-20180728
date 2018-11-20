@@ -18,10 +18,11 @@ router.get('/:userId/stocks', async (req, res, next) => {
   try {
     const stocks = await Stock.findAll({
       where: {
-        id: req.params.userId,
+        userId: req.params.userId,
       },
       order: [['stockName', 'asc']],
     });
+    console.log(req.params.userId);
     res.json(stocks);
   } catch (err) {
     next(err);
@@ -32,7 +33,7 @@ router.get('/:userId/trades', async (req, res, next) => {
   try {
     const trades = await Trade.findAll({
       where: {
-        id: req.params.userId,
+        userId: req.params.userId,
       },
       order: [['createdAt', 'desc']],
     });

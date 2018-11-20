@@ -30,27 +30,27 @@ async function seed() {
       tradePrice: 3400,
       userId: 1,
     }),
-    {
+    Trade.create({
       tradeCount: 2,
       tradeSymbol: 'SMPL2',
       tradeName: 'Sample Two',
       tradePrice: 2200,
       userId: 1,
-    },
-    {
+    }),
+    Trade.create({
       tradeCount: 8,
       tradeSymbol: 'SMPL2',
       tradeName: 'Sample Two',
       tradePrice: 2300,
       userId: 2,
-    },
-    {
+    }),
+    Trade.create({
       tradeCount: 1,
       tradeSymbol: 'SMPL3',
       tradeName: 'Sample Three',
       tradePrice: 120,
       userId: 2,
-    },
+    }),
   ]);
 
   console.log(`seeded ${trades.length} trades`);
