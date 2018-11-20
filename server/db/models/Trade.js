@@ -2,16 +2,16 @@ const db = require('../db');
 const Sequelize = require('sequelize');
 
 const Trade = db.define('trade', {
-  amount: {
+  tradeAmount: {
     type: Sequelize.INTEGER,
   },
-  companySymbol: {
+  tradeSymbol: {
     type: Sequelize.STRING,
   },
-  companyName: {
+  tradeName: {
     type: Sequelize.STRING,
   },
-  companyPrice: {
+  tradePrice: {
     type: Sequelize.INTEGER,
   },
 });
