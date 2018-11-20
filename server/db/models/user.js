@@ -21,6 +21,7 @@ const User = db.define('user', {
   },
   balanceUSCents: {
     type: Sequelize.INTEGER,
+    defaultValue: 500000,
   },
   salt: {
     type: Sequelize.STRING,
