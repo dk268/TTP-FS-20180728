@@ -19,6 +19,9 @@ const User = db.define('user', {
   name: {
     type: Sequelize.STRING,
   },
+  balanceUSCents: {
+    type: Sequelize.INTEGER,
+  },
   salt: {
     type: Sequelize.STRING,
     // Making `.salt` act like a function hides it when serializing to JSON.
