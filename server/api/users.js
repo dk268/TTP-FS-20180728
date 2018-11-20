@@ -22,7 +22,6 @@ router.get('/:userId/stocks', async (req, res, next) => {
       },
       order: [['stockName', 'asc']],
     });
-    console.log(req.params.userId);
     res.json(stocks);
   } catch (err) {
     next(err);
