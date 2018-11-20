@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { User } = require('../db/models');
+const { User, Stock, Trade } = require('../db/models');
 module.exports = router;
 
 router.get('/', async (req, res, next) => {
@@ -9,6 +9,43 @@ router.get('/', async (req, res, next) => {
       attributes: ['id', 'email', `name`],
     });
     res.json(users);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get('/:userId/stocks', async (req, res, next) => {
+  try {
+    const stocks = await Stock.findAll({
+      where: {
+        id: req.params.userId,
+      },
+    });
+    res.json(stocks);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get('/:userId/trades', async (req, res, next) => {
+  try {
+    const trades = await Trade.findAll({
+      where: {
+        id: req.params.userId,
+      },
+    });
+    res.json(trades);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get('/:userId', async (req, res, next) => {
+  try {
+    const singleUser = await User.findById(req.params.userId, {
+      attributes: ['id', 'email', `name`],
+    });
+    res.json(singleUser);
   } catch (err) {
     next(err);
   }
