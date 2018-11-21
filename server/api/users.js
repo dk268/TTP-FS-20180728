@@ -6,7 +6,7 @@ router.get('/', async (req, res, next) => {
   try {
     const users = await User.findAll({
       //avoid sending password or salt...
-      attributes: ['id', 'email', `name`],
+      attributes: ['id', 'email', `userName`],
     });
     res.json(users);
   } catch (err) {
