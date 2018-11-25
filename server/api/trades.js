@@ -5,9 +5,9 @@ const _fetch = require('isomorphic-fetch');
 
 const iex = new IEXClient(_fetch);
 
-iex.stockCompany('AAPL').then(company => console.log(company));
-iex.stockOpenClose('AAPL').then(company => console.log(company));
-iex.stockPrice('AAPL').then(company => console.log(company));
+// iex.stockCompany('AAPL').then(company => console.log(company));
+// iex.stockOpenClose('AAPL').then(company => console.log(company));
+// iex.stockPrice('AAPL').then(company => console.log(company));
 
 module.exports = router;
 
@@ -32,9 +32,14 @@ router.get('/:tradeId', async (req, res, next) => {
 router.post('/', async (req, res, next) => {
   try {
     const currentPrice = await iex.stockPrice(req.body.tradeSymbol);
-    if (!currentPrice) res.status(405).send(`No such stock symbol.`);
-    if (currentPrice != req.body.tradePrice)
+    if (!currentPrice) {
+      res.status(405).send(`No such stock symbol.`);
+      return `Error: symbol missing`;
+    }
+    if (currentPrice != req.body.tradePrice) {
       res.status(405).send(`Price has since updated. Please try again.`);
+      return `Error: price out of date`;
+    }
     const newTrade = await Trade.create({
       ...req.body,
       tradePrice: currentPrice,
@@ -67,6 +72,7 @@ router.post('/', async (req, res, next) => {
       );
     }
     res.json(newTrade);
+    return newTrade;
   } catch (err) {
     next(err);
   }
