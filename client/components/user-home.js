@@ -6,12 +6,14 @@ import { connect } from 'react-redux';
  * COMPONENT
  */
 export const UserHome = props => {
-  console.log(props);
-  const { email } = props;
+  const { email, userName } = props;
 
   return (
     <div>
-      <h3>Welcome, {email}</h3>
+      <h3>Welcome, {userName}!</h3>
+      <Link to="/portfolio">your portfolio</Link>
+      <Link to="/transactions">your transactions</Link>
+      <h4>Signed in under email {email}</h4>
     </div>
   );
 };
