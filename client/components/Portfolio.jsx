@@ -17,7 +17,24 @@ class Portfolio extends React.Component {
   };
 
   render = () => {
-    return <h1>Hi!</h1>;
+    const { status } = this.props.currentUser.stocks;
+    const { stocks } = this.props.currentUser;
+    switch (status) {
+      case LOADING:
+        return <h1>Loading...</h1>;
+      case LOADED:
+        return (
+          <div id="portfolio-master-div">
+            <div id="portfolio-left-div">
+              {stocks.collection.map(stock => (
+                <h4 key={stock.id}>{stock.amount}</h4>
+              ))}
+            </div>
+          </div>
+        );
+      default:
+        return <h1> error default </h1>;
+    }
   };
 }
 
