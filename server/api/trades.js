@@ -1,10 +1,12 @@
 const router = require('express').Router();
 const { Trade, Stock } = require('../db/models');
-import { IEXClient } from 'iex-api';
-import * as _fetch from 'isomorphic-fetch';
+const { IEXClient } = require('iex-api');
+const _fetch = require('isomorphic-fetch');
 
 const iex = new IEXClient(_fetch);
+
 iex.stockCompany('AAPL').then(company => console.log(company));
+iex.stockOpenClose('AAPL').then(company => console.log(company));
 
 module.exports = router;
 
