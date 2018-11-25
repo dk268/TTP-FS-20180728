@@ -7,6 +7,7 @@ const iex = new IEXClient(_fetch);
 
 iex.stockCompany('AAPL').then(company => console.log(company));
 iex.stockOpenClose('AAPL').then(company => console.log(company));
+iex.stockPrice('AAPL').then(company => console.log(company));
 
 module.exports = router;
 
@@ -30,7 +31,14 @@ router.get('/:tradeId', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
-    const newTrade = await Trade.create(req.body);
+    const currentPrice = await iex.stockPrice(req.body.tradeSymbol);
+    if (!currentPrice) res.status(405).send(`No such stock symbol.`);
+    if (currentPrice != req.body.tradePrice)
+      res.status(405).send(`Price has since updated. Please try again.`);
+    const newTrade = await Trade.create({
+      ...req.body,
+      tradePrice: currentPrice,
+    });
     const [updatingStock, wasCreated] = await Stock.findOrCreate({
       where: {
         userId: newTrade.userId,
@@ -38,10 +46,25 @@ router.post('/', async (req, res, next) => {
       },
     });
     if (wasCreated) {
-      const [, updatedStock] = await updatingStock.update({
-        stockName: newTrade.tradeName,
-        stockCount: newTrade.tradeCount,
-      });
+      const [, updatedStock] = await updatingStock.update(
+        {
+          stockName: newTrade.tradeName,
+          stockCount: newTrade.tradeCount,
+          stockPrice: currentPrice,
+        },
+        {
+          returning: true,
+          plain: true,
+        }
+      );
+    } else {
+      const [, updatedStock] = await updatingStock.update(
+        {
+          stockCount: this.stockCount + newTrade.tradeCount,
+          stockPrice: currentPrice,
+        },
+        { returning: true, plain: true }
+      );
     }
     res.json(newTrade);
   } catch (err) {
