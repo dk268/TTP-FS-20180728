@@ -19,3 +19,16 @@ form div {
   margin: 1em;
   display: inline-block;
 }
+
+#navbar-links-div {
+  display: flex;
+  justify-content: space-between;
+}
+
+#navbar-left-side-div {
+  align-self: left;
+}
+
+#navbar-right-side-div {
+  align-self: right;
+}
