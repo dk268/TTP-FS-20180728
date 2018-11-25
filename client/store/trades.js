@@ -23,7 +23,15 @@ export const getTrades = id => async dispatch => {
   }
 };
 
-export const addTrade = trade => async dispatch => {};
+export const addTrade = trade => async dispatch => {
+  try {
+    dispatch(aCF(LOADING_TRADES));
+    const newTrade = await Axios.post(`/api/trades`, trade);
+    dispatch(aCF(ADD_TRADE, newTrade.data));
+  } catch (e) {
+    dispatch(aCF(ERROR_TRADES, e));
+  }
+};
 
 const defaultState = {
   status: UNASKED,
@@ -39,7 +47,11 @@ export default function(state = defaultState, action) {
       return { ...state, status: LOADED, collection: action.payload };
     }
     case ADD_TRADE: {
-      return { ...state, collection: [...state.collection, action.payload] };
+      return {
+        ...state,
+        status: LOADED,
+        collection: [...state.collection, action.payload],
+      };
     }
     case ERROR_TRADES: {
       return { ...state, status: ERROR, error: action.payload };
