@@ -1,22 +1,46 @@
 import axios from 'axios';
 import history from '../history';
+import { aCF, UNASKED, LOADED, ERROR } from '.';
+import Axios from 'axios';
 
 /**
  * ACTION TYPES
  */
 const GET_USER = 'GET_USER';
 const REMOVE_USER = 'REMOVE_USER';
+const ERROR_USER = 'ERROR_USER';
+const LOADING_USER = 'LOADING_USER';
+const LOADED_USER = 'LOADED_USER';
 
 /**
  * INITIAL STATE
  */
-const defaultUser = {};
+const defaultUser = {
+  stocks: {
+    status: UNASKED,
+    collection: [],
+  },
+  transactions: {
+    status: UNASKED,
+    collection: [],
+  },
+};
 
 /**
  * ACTION CREATORS
  */
 const getUser = user => ({ type: GET_USER, user });
 const removeUser = () => ({ type: REMOVE_USER });
+export const getUserStocks = id => async dispatch => {
+  try {
+    dispatch(aCF(LOADING_USER));
+    const userStocks = await Axios.get(`/user/${id}/stocks`);
+    dispatch(aCF(LOADED_USER, userStocks.data));
+    return userStocks.data;
+  } catch (e) {
+    dispatch(aCF(ERROR_USER, e));
+  }
+};
 
 /**
  * THUNK CREATORS
@@ -65,6 +89,30 @@ export default function(state = defaultUser, action) {
       return action.user;
     case REMOVE_USER:
       return defaultUser;
+    case LOADING_USER:
+      return {
+        ...state,
+        stocks: {
+          ...stocks,
+          status: LOADING,
+        },
+      };
+    case LOADED_USER:
+      return {
+        ...state,
+        stocks: {
+          status: LOADED,
+          collection: action.payload,
+        },
+      };
+    case ERROR_USER:
+      return {
+        ...state,
+        stocks: {
+          ...stocks,
+          status: ERROR,
+        },
+      };
     default:
       return state;
   }
