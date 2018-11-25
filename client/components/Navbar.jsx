@@ -19,7 +19,7 @@ const Navbar = ({ handleClick, isLoggedIn }) => (
           </div>
           <div id="navbar-right-side-div">
             <Link to="/portfolio">portfolio</Link>
-            <Link to="/transactions">transactions</Link>
+            <Link to="/trades">trades</Link>
           </div>
         </div>
       ) : (

@@ -20,7 +20,7 @@ const defaultUser = {
     status: UNASKED,
     collection: [],
   },
-  transactions: {
+  trades: {
     status: UNASKED,
     collection: [],
   },

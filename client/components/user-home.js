@@ -13,7 +13,7 @@ export const UserHome = props => {
     <div>
       <h3>Welcome, {userName}!</h3>
       <Link to="/portfolio">your portfolio</Link>
-      <Link to="/transactions">your transactions</Link>
+      <Link to="/trades">your trades</Link>
       <h4>Signed in under email {email}</h4>
     </div>
   );
