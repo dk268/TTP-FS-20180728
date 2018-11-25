@@ -4,6 +4,7 @@ import thunkMiddleware from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import user from './user';
 import stocks from './stocks';
+import trades from './trades';
 
 export const [UNASKED, LOADING, LOADED, ERROR] = [
   `UNASKED`,
@@ -14,7 +15,7 @@ export const [UNASKED, LOADING, LOADED, ERROR] = [
 
 export const aCF = (type, payload) => ({ type, payload });
 
-const reducer = combineReducers({ user, stocks });
+const reducer = combineReducers({ user, stocks, trades });
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }))
 );

@@ -13,7 +13,7 @@ router.get('/', async (req, res, next) => {
 
 router.get('/:tradeId', async (req, res, next) => {
   try {
-    const singleTrade = await Stock.findById(req.params.tradeId);
+    const singleTrade = await Trade.findById(req.params.tradeId);
     res.json(singleTrade);
   } catch (err) {
     next(err);
