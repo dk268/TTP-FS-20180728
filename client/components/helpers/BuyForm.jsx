@@ -24,6 +24,9 @@ class BuyForm extends Component {
 
   handleChange = async e => {
     this.setState({ [e.target.name]: e.target.value });
+    if (this.state.errorStatus) {
+      this.setState({ errorStatus: '' });
+    }
     if (e.target.name === 'tradeSymbol') {
       let currentCompany = '';
       this.state.symbolTouches++;
