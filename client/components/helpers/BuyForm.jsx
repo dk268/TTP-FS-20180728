@@ -64,7 +64,6 @@ class BuyForm extends Component {
   };
 
   render = () => {
-    console.log(`error state~`, this.state.errorStatus);
     return (
       <div id="buy-form-div">
         <form id="buy-form-form" onSubmit={this.handleSubmit}>
@@ -93,8 +92,10 @@ class BuyForm extends Component {
           ) : (
             <h3>Unknown symbol...</h3>
           )}
-          <h2>Current price: {this.state.currentPrice}</h2>
-          <h3>Total: {this.state.currentPrice * this.state.tradeCount || 0}</h3>
+          <h2>Current price: ${this.state.currentPrice}</h2>
+          <h3>
+            Total: ${this.state.currentPrice * this.state.tradeCount || 0}
+          </h3>
           <button
             id="buy-form-submit-button"
             type="submit"

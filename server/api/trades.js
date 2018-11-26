@@ -34,14 +34,17 @@ router.post('/', async (req, res, next) => {
     const currentPrice = await iex.stockPrice(req.body.tradeSymbol);
     if (!currentPrice) {
       res.status(405).send(`No such stock symbol.`);
+      return;
     }
     if (currentPrice != req.body.tradePrice) {
-      res.status(405).send('Price has since updated. Please try again.');
+      res.status(406).send('Price has since updated. Please try again.');
+      return;
     }
     const currentUser = await User.findById(req.body.userId);
     const moneySpent = req.body.tradeCount * req.body.tradePrice * 100;
     if (moneySpent > currentUser.dataValues.balanceUSCents) {
       res.status(401).send(`Not enough money.`);
+      return;
     }
     const newTrade = await Trade.create({
       ...req.body,

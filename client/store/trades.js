@@ -32,12 +32,16 @@ export const addTrade = trade => async dispatch => {
     return newTrade.data;
   } catch (e) {
     dispatch(aCF(ERROR_TRADES, e));
+    console.log('got here');
+    console.log(e, e.response, e.response.data);
+    return e.response.data;
   }
 };
 
 const defaultState = {
   status: UNASKED,
   collection: [],
+  error: {},
 };
 
 export default function(state = defaultState, action) {
@@ -53,6 +57,7 @@ export default function(state = defaultState, action) {
         ...state,
         status: LOADED,
         collection: [...state.collection, action.payload],
+        error: {},
       };
     }
     case ERROR_TRADES: {
