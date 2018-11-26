@@ -15,7 +15,6 @@ class Portfolio extends React.Component {
     super(props);
   }
   componentDidMount = async () => {
-    // const { status } = this.props.currentStocks;
     const { id } = this.props.currentUser;
     await this.props.getStocks(id);
   };
@@ -26,7 +25,6 @@ class Portfolio extends React.Component {
   };
 
   render = () => {
-    console.log(this.state);
     const { currentStocks } = this.props;
     if (!currentStocks.collection || !currentStocks.collection.length) {
       return (
