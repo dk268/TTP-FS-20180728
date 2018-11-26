@@ -55,9 +55,8 @@ router.post('/', async (req, res, next) => {
       },
     });
     console.log('before IF WAS CREATED');
-    console.log(updatingStock.dataValues, newTrade.tradeCount, newTrade);
     if (wasCreated) {
-      const updatedStock = await updatingStock.update(
+      await updatingStock.update(
         {
           stockName: newTrade.dataValues.tradeName,
           stockCount: newTrade.dataValues.tradeCount * 1,
@@ -69,9 +68,10 @@ router.post('/', async (req, res, next) => {
         }
       );
     } else {
-      const updatedStock = await updatingStock.update(
+      const oldCount = updatingStock.dataValues.stockCount;
+      await updatingStock.update(
         {
-          stockCount: this.stockCount + newTrade.dataValues.tradeCount,
+          stockCount: oldCount + newTrade.dataValues.tradeCount,
           stockPrice: currentPrice * 100,
         },
         { returning: true, plain: true }
