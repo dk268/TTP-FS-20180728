@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
 
 const PortfolioCard = props => {
-  console.log(props);
   const { stock } = props;
   let color;
   if (stock.openPrice > stock.currentPrice) color = `red`;
   else if (stock.openPrice < stock.currentPrice) color = `green`;
   else color = `gray`;
-  console.log(stock, color);
-  console.log(stock, stock.stockName, stock.openPrice);
   return (
     <div className="stocks-map-master-div">
       <div className="stocks-map" key={stock.id}>
