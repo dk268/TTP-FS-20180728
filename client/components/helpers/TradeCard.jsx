@@ -8,8 +8,16 @@ const TradeCard = props => {
       <p className="trade-card-p">
         Company: {trade.tradeName} "{trade.tradeSymbol}"
       </p>
-      <p className="trade-card-p">Transaction Time: {trade.createdAt}</p>
-      <p className="trade-card-p">Transaction amount: ${trade.tradeAmount}</p>
+      <p className="trade-card-p">
+        Transaction Time: {new Date(trade.createdAt).toLocaleString()}
+      </p>
+      <p className="trade-card-p">
+        Transaction amount: ${trade.tradeAmount % 100
+          ? trade.tradeAmount % 10
+            ? trade.tradeAmount / 100
+            : trade.tradeAmount / 100 + '0'
+          : trade.tradeAmount / 100 + '.00'}
+      </p>
     </div>
   );
 };

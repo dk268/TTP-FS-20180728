@@ -129,6 +129,7 @@ class BuyForm extends Component {
             disabled={
               !Number.isInteger(this.state.tradeCount * 1) ||
               !this.state.tradeCount ||
+              this.state.tradeCount == 0 || //intentional ==
               !this.state.tradeSymbol ||
               this.state.currentPrice === `Unknown symbol`
             }

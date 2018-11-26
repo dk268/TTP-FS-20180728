@@ -36,7 +36,7 @@ class Trades extends Component {
                 className="trade-card-map"
                 trade={trade}
               />
-            ))};
+            ))}
           </div>
         );
       default:
