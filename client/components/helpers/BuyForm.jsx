@@ -49,7 +49,7 @@ class BuyForm extends Component {
   };
 
   render = () => {
-    console.log(this.state.tradeSymbol);
+    console.log(this.props.currentUser);
     return (
       <div id="buy-form-div">
         <form id="buy-form-form" onSubmit={this.handleSubmit}>

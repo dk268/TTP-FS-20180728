@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { Trade, Stock } = require('../db/models');
+const { Trade, Stock, User } = require('../db/models');
 const { IEXClient } = require('iex-api');
 const _fetch = require('isomorphic-fetch');
 
@@ -40,6 +40,11 @@ router.post('/', async (req, res, next) => {
       res.status(405).send(`Price has since updated. Please try again.`);
       return `Error: price out of date`;
     }
+    const currentUser = await User.findById(req.body.userId);
+    const moneySpent = req.body.tradeCount * req.body.tradePrice * 100;
+    if (moneySpent > currentUser.dataValues.balanceUSCents) {
+      res.status(401).send(`Not enough money.`);
+    }
     const newTrade = await Trade.create({
       ...req.body,
       tradePrice: currentPrice * 100,
@@ -72,6 +77,7 @@ router.post('/', async (req, res, next) => {
         { returning: true, plain: true }
       );
     }
+    await currentUser.spendMoney(moneySpent);
     res.json(newTrade);
     return newTrade;
   } catch (err) {
