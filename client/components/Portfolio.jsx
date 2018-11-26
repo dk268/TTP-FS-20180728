@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { LOADED, LOADING, UNASKED } from '../store';
 import { getStocks } from '../store/stocks';
+import BuyForm from './helpers/BuyForm';
 
 class Portfolio extends React.Component {
   constructor(props) {
@@ -17,7 +18,13 @@ class Portfolio extends React.Component {
 
   render = () => {
     const { currentStocks } = this.props;
-    if (!currentStocks.length) return <h2>No stocks yet!</h2>;
+    if (!currentStocks.length)
+      return (
+        <div id="no-stocks-yet-div">
+          <h2>No stocks yet! Buy one?</h2>
+          <BuyForm />
+        </div>
+      );
     switch (currentStocks.status) {
       case UNASKED:
         return <h3>No stocks yet, I guess...</h3>;
@@ -30,6 +37,9 @@ class Portfolio extends React.Component {
               {currentStocks.collection.map(stock => (
                 <h4 key={stock.id}>{stock.amount}</h4>
               ))}
+            </div>
+            <div id="portfolio-right-div">
+              <BuyForm />
             </div>
           </div>
         );
