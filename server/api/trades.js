@@ -34,11 +34,9 @@ router.post('/', async (req, res, next) => {
     const currentPrice = await iex.stockPrice(req.body.tradeSymbol);
     if (!currentPrice) {
       res.status(405).send(`No such stock symbol.`);
-      return `Error: symbol missing`;
     }
     if (currentPrice != req.body.tradePrice) {
-      res.status(405).send(`Price has since updated. Please try again.`);
-      return `Error: price out of date`;
+      res.status(405).send('Price has since updated. Please try again.');
     }
     const currentUser = await User.findById(req.body.userId);
     const moneySpent = req.body.tradeCount * req.body.tradePrice * 100;
@@ -47,7 +45,7 @@ router.post('/', async (req, res, next) => {
     }
     const newTrade = await Trade.create({
       ...req.body,
-      tradePrice: currentPrice * 100,
+      tradePrice: Math.floor(currentPrice * 100),
     });
     const [updatingStock, wasCreated] = await Stock.findOrCreate({
       where: {
@@ -79,7 +77,6 @@ router.post('/', async (req, res, next) => {
     }
     await currentUser.spendMoney(moneySpent);
     res.json(newTrade);
-    return newTrade;
   } catch (err) {
     next(err);
   }

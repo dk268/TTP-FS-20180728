@@ -17,6 +17,7 @@ class BuyForm extends Component {
       symbolValid: false,
       countValid: false,
       currentPrice: `n/a`,
+      errorStatus: '',
     };
   }
 
@@ -35,7 +36,7 @@ class BuyForm extends Component {
       iex.stockCompany(this.state.tradeSymbol),
       iex.stockPrice(this.state.tradeSymbol),
     ]);
-    await this.props.addTrade({
+    const res = await this.props.addTrade({
       tradeSymbol: companyInfo.symbol,
       tradeCount: this.state.tradeCount * 1,
       tradeName: companyInfo.companyName,
@@ -45,6 +46,7 @@ class BuyForm extends Component {
     this.setState({
       tradeSymbol: ``,
       tradeCount: 0,
+      errorStatus: res,
     });
   };
 
@@ -86,6 +88,9 @@ class BuyForm extends Component {
           >
             buy!
           </button>
+          <small className="red">
+            {this.state.errorStatus ? this.state.errorStatus : ''}
+          </small>
         </form>
       </div>
     );

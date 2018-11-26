@@ -28,6 +28,7 @@ export const addTrade = trade => async dispatch => {
     dispatch(aCF(LOADING_TRADES));
     const newTrade = await Axios.post(`/api/trades`, trade);
     dispatch(aCF(ADD_TRADE, newTrade.data));
+    return newTrade.data;
   } catch (e) {
     dispatch(aCF(ERROR_TRADES, e));
   }

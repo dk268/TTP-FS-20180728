@@ -45,7 +45,7 @@ User.prototype.correctPassword = function(candidatePwd) {
   return User.encryptPassword(candidatePwd, this.salt()) === this.password();
 };
 
-User.prototype.spendMoney = async amount => {
+User.prototype.spendMoney = async function(amount) {
   this.balanceUSCents = this.balanceUSCents - amount;
   await this.save();
 };
