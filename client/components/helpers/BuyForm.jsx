@@ -33,7 +33,6 @@ class BuyForm extends Component {
       const val = e.target.value;
       const currentPrice = await iex.stockPrice(val);
       currentCompany = await iex.stockCompany(val);
-      console.log(currentCompany, val, `current companye`);
       if (currentPrice) {
         this.setState({ currentPrice });
       }
@@ -74,10 +73,6 @@ class BuyForm extends Component {
 
   render = () => {
     let currFunds = this.monify(this.props.currentUser.balanceUSCents);
-    // currFunds =
-    //   currFunds % 100
-    //     ? currFunds % 10 ? currFunds / 100 : currFunds / 100 + '0'
-    //     : currFunds / 100 + '.00';
     let remainingFunds = currFunds;
     if (
       this.state.currentPrice &&
