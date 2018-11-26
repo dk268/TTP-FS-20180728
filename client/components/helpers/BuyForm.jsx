@@ -3,6 +3,7 @@ import _fetch from 'isomorphic-fetch';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { addTrade } from '../../store/trades';
+import { me } from '../../store';
 
 const iex = new IEXClient(_fetch);
 
@@ -63,6 +64,7 @@ class BuyForm extends Component {
       tradeCount: 0,
       errorStatus: typeof res == 'string' ? res : '',
     });
+    await this.props.me();
     this.props.handlePurchase();
   };
 
@@ -84,7 +86,7 @@ class BuyForm extends Component {
       this.state.currentPrice !== 'Unknown symbol'
     ) {
       remainingFunds =
-        currFunds - this.state.currentPrice * this.state.tradeCount;
+        currFunds - (this.state.currentPrice * this.state.tradeCount || 0);
     }
     return (
       <div id="buy-form-div">
@@ -139,9 +141,10 @@ class BuyForm extends Component {
         </form>
         <h2 id="money-remaining-h2" className={remainingFunds > 0 ? `` : `red`}>
           {remainingFunds > 0
-            ? `Money after purchase: $${this.monify(remainingFunds * 100)}`
+            ? `Money after purchase: $${this.monify(remainingFunds * 100) ||
+                remainingFunds}`
             : `Money after purchase: -$${this.monify(remainingFunds * 100) *
-                -1}`}
+                -1 || remainingFunds}`}
         </h2>
       </div>
     );
@@ -152,6 +155,6 @@ const mapStateToProps = state => ({
   currentUser: state.user,
 });
 
-const mapDispatchToProps = { addTrade };
+const mapDispatchToProps = { addTrade, me };
 
 export default connect(mapStateToProps, mapDispatchToProps)(BuyForm);
