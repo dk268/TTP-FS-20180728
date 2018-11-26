@@ -31,4 +31,69 @@ form div {
 
 #navbar-right-side-div {
   align-self: right;
+  height: 100%;
+}
+
+#portfolio-master-div {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+#portfolio-left-div {
+  display: flex;
+  flex-direction: column;
+  background-color: lightblue;
+  height: 100%;
+}
+
+#portfolio-right-div {
+  background-color: lightblue;
+}
+
+.stocks-map-master-div {
+  display: flex;
+  flex-grow: 2;
+  height: 100%;
+  justify-content: space-between;
+}
+
+.stocks-map {
+  display: flex;
+  flex-direction: column;
+}
+
+.stocks-map-div {
+  display: flex;
+  justify-content: left;
+}
+
+.stocks-map-current-price-div {
+  margin-right: 4px;
+}
+
+.stocks-map-summary-div {
+  align-self: center;
+  min-width: 40%;
+}
+
+.green {
+  color: green;
+}
+
+.red {
+  color: red;
+}
+
+.gray {
+  color: gray;
+}
+
+.green-summary {
+  background-color: green;
+}
+.red-summary {
+  background-color: red;
+}
+.gray-summary {
+  background-color: gray;
 }
