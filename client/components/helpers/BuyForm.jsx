@@ -66,9 +66,30 @@ class BuyForm extends Component {
     });
   };
 
+  monify = amt => {
+    return amt % 100
+      ? amt % 10 ? amt / 100 : amt / 100 + '0'
+      : amt / 100 + '.00';
+  };
+
   render = () => {
+    let currFunds = this.monify(this.props.currentUser.balanceUSCents);
+    // currFunds =
+    //   currFunds % 100
+    //     ? currFunds % 10 ? currFunds / 100 : currFunds / 100 + '0'
+    //     : currFunds / 100 + '.00';
+    let remainingFunds = currFunds;
+    if (
+      this.state.currentPrice &&
+      this.state.tradeCount &&
+      this.state.currentPrice !== 'Unknown symbol'
+    ) {
+      remainingFunds =
+        currFunds - this.state.currentPrice * this.state.tradeCount;
+    }
     return (
       <div id="buy-form-div">
+        <h1 id="buy-form-money-amount">Your funds: ${currFunds}</h1>
         <form id="buy-form-form" onSubmit={this.handleSubmit}>
           <label htmlFor="tradeSymbol">
             <small>trade symbol</small>
@@ -111,10 +132,21 @@ class BuyForm extends Component {
           >
             buy!
           </button>
-          <small className="red">
+          <small id="buy-button-error-small" className="red">
             {this.state.errorStatus ? this.state.errorStatus : ''}
           </small>
         </form>
+        <h2 id="money-remaining-h2" className={remainingFunds > 0 ? `` : `red`}>
+          {remainingFunds > 0
+            ? `Money after purchase: $${Math.floor(
+                this.monify(remainingFunds * 100) * 100
+              ) / 100}`
+            : `Money after purchase: -$${Math.floor(
+                this.monify(remainingFunds * 100) * 100
+              ) /
+                100 *
+                -1}`}
+        </h2>
       </div>
     );
   };
