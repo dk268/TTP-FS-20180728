@@ -63,12 +63,16 @@ class BuyForm extends Component {
       tradeCount: 0,
       errorStatus: typeof res == 'string' ? res : '',
     });
+    this.props.handlePurchase();
   };
 
   monify = amt => {
-    return amt % 100
-      ? amt % 10 ? amt / 100 : amt / 100 + '0'
-      : amt / 100 + '.00';
+    if (isNaN(amt)) return NaN;
+    let truncated = Math.floor(amt);
+    console.log(truncated, amt * 100, Math.floor(amt * 100));
+    return truncated % 100
+      ? truncated % 10 ? truncated / 100 : truncated / 100 + '0'
+      : truncated / 100 + '.00';
   };
 
   render = () => {
@@ -113,7 +117,9 @@ class BuyForm extends Component {
           )}
           <h2>Current price: ${this.state.currentPrice}</h2>
           <h3>
-            Total: ${this.state.currentPrice * this.state.tradeCount || 0}
+            Total: ${this.monify(
+              this.state.currentPrice * this.state.tradeCount * 100
+            ) || 0}
           </h3>
           <button
             id="buy-form-submit-button"
@@ -133,13 +139,8 @@ class BuyForm extends Component {
         </form>
         <h2 id="money-remaining-h2" className={remainingFunds > 0 ? `` : `red`}>
           {remainingFunds > 0
-            ? `Money after purchase: $${Math.floor(
-                this.monify(remainingFunds * 100) * 100
-              ) / 100}`
-            : `Money after purchase: -$${Math.floor(
-                this.monify(remainingFunds * 100) * 100
-              ) /
-                100 *
+            ? `Money after purchase: $${this.monify(remainingFunds * 100)}`
+            : `Money after purchase: -$${this.monify(remainingFunds * 100) *
                 -1}`}
         </h2>
       </div>

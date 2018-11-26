@@ -15,20 +15,24 @@ class Portfolio extends React.Component {
     super(props);
   }
   componentDidMount = async () => {
-    const { status } = this.props.currentStocks;
+    // const { status } = this.props.currentStocks;
     const { id } = this.props.currentUser;
-    if (status !== LOADED) {
-      await this.props.getStocks(id);
-    }
+    await this.props.getStocks(id);
+  };
+
+  handlePurchase = async () => {
+    const { id } = this.props.currentUser;
+    await this.props.getStocks(id);
   };
 
   render = () => {
+    console.log(this.state);
     const { currentStocks } = this.props;
     if (!currentStocks.collection || !currentStocks.collection.length) {
       return (
         <div id="no-stocks-yet-div">
           <h2>No stocks yet! Buy one?</h2>
-          <BuyForm />
+          <BuyForm handlePurchase={this.handlePurchase} />
         </div>
       );
     }
@@ -46,7 +50,7 @@ class Portfolio extends React.Component {
               ))}
             </div>
             <div id="portfolio-right-div">
-              <BuyForm />
+              <BuyForm handlePurchase={this.handlePurchase} />
             </div>
           </div>
         );
@@ -59,6 +63,7 @@ class Portfolio extends React.Component {
 const mapStateToProps = state => ({
   currentUser: state.user,
   currentStocks: state.stocks,
+  currentTrades: state.trades,
 });
 
 const mapDispatchToProps = { getStocks };
