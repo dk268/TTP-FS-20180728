@@ -14,6 +14,9 @@ const Stock = db.define('stock', {
   stockCount: {
     type: Sequelize.INTEGER,
   },
+  stockOpen: {
+    type: Sequelize.INTEGER,
+  },
   stockAmount: {
     type: Sequelize.VIRTUAL,
     get() {

@@ -2,29 +2,42 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { LOADED, LOADING, UNASKED } from '../store';
-import { getStocks } from '../store/stocks';
+import stocks, { getStocks } from '../store/stocks';
 import BuyForm from './helpers/BuyForm';
+import PortfolioCard from './helpers/PortfolioCard';
+import { IEXClient } from 'iex-api';
+import _fetch from 'isomorphic-fetch';
+
+const iex = new IEXClient(_fetch);
 
 class Portfolio extends React.Component {
   constructor(props) {
     super(props);
   }
-  componentDidMount = () => {
-    console.log(this.props);
+  componentDidMount = async () => {
     const { status } = this.props.currentStocks;
     const { id } = this.props.currentUser;
-    if (status !== LOADED) this.props.getStocks(id);
+    if (status !== LOADED) await this.props.getStocks(id);
+    for (let stock of this.props.currentStocks.collection) {
+      console.log(stock, stock.openPrice);
+      const returned = await iex.stockOpenClose(stock.stockSymbol);
+      stock.openPrice = returned.open.price;
+      stock.currentPrice = await iex.stockPrice(stock.stockSymbol);
+      console.log(stock, stock.openPrice, stock.currentPrice);
+    }
+    console.log(this.props.currentStocks);
   };
 
   render = () => {
     const { currentStocks } = this.props;
-    if (!currentStocks.length)
+    if (!currentStocks.collection || !currentStocks.collection.length) {
       return (
         <div id="no-stocks-yet-div">
           <h2>No stocks yet! Buy one?</h2>
           <BuyForm />
         </div>
       );
+    }
     switch (currentStocks.status) {
       case UNASKED:
         return <h3>No stocks yet, I guess...</h3>;
@@ -35,7 +48,7 @@ class Portfolio extends React.Component {
           <div id="portfolio-master-div">
             <div id="portfolio-left-div">
               {currentStocks.collection.map(stock => (
-                <h4 key={stock.id}>{stock.amount}</h4>
+                <PortfolioCard stock={stock} />
               ))}
             </div>
             <div id="portfolio-right-div">
