@@ -19,13 +19,10 @@ class Portfolio extends React.Component {
     const { id } = this.props.currentUser;
     if (status !== LOADED) await this.props.getStocks(id);
     for (let stock of this.props.currentStocks.collection) {
-      console.log(stock, stock.openPrice);
       const returned = await iex.stockOpenClose(stock.stockSymbol);
       stock.openPrice = returned.open.price;
       stock.currentPrice = await iex.stockPrice(stock.stockSymbol);
-      console.log(stock, stock.openPrice, stock.currentPrice);
     }
-    console.log(this.props.currentStocks);
   };
 
   render = () => {
