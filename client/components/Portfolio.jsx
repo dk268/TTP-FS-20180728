@@ -17,11 +17,8 @@ class Portfolio extends React.Component {
   componentDidMount = async () => {
     const { status } = this.props.currentStocks;
     const { id } = this.props.currentUser;
-    if (status !== LOADED) await this.props.getStocks(id);
-    for (let stock of this.props.currentStocks.collection) {
-      const returned = await iex.stockOpenClose(stock.stockSymbol);
-      stock.openPrice = returned.open.price;
-      stock.currentPrice = await iex.stockPrice(stock.stockSymbol);
+    if (status !== LOADED) {
+      await this.props.getStocks(id);
     }
   };
 

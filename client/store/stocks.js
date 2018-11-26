@@ -2,6 +2,10 @@ import axios from 'axios';
 import history from '../history';
 import { aCF, UNASKED, LOADED, ERROR, LOADING } from '.';
 import Axios from 'axios';
+import { IEXClient } from 'iex-api';
+import _fetch from 'isomorphic-fetch';
+
+const iex = new IEXClient(_fetch);
 
 /**
  * ACTION TYPES
@@ -16,6 +20,11 @@ export const getStocks = id => async dispatch => {
   try {
     dispatch(aCF(LOADING_STOCKS));
     const stocks = await Axios.get(`/api/users/${id}/stocks`);
+    for (let stock of stocks.data) {
+      const returned = await iex.stockOpenClose(stock.stockSymbol);
+      stock.openPrice = returned.open.price;
+      stock.currentPrice = await iex.stockPrice(stock.stockSymbol);
+    }
     dispatch(aCF(LOADED_STOCKS, stocks.data));
     return stocks.data;
   } catch (e) {
