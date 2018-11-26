@@ -10,10 +10,12 @@ export const UserHome = props => {
   const { email, userName } = props;
 
   return (
-    <div>
+    <div id="user-home-master-div">
       <h3>Welcome, {userName}!</h3>
-      <Link to="/portfolio">your portfolio</Link>
-      <Link to="/trades">your trades</Link>
+      <h3 id="user-home-links-h3">
+        your <Link to="/portfolio">portfolio</Link> || your{' '}
+        <Link to="/trades">trades</Link>{' '}
+      </h3>
       <h4>Signed in under email {email}</h4>
     </div>
   );

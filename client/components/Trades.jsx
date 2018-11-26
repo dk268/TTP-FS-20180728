@@ -30,6 +30,7 @@ class Trades extends Component {
       case LOADED:
         return (
           <div id="trades-master-div">
+            <h1 id="trades-master-h1">Your Transactions</h1>
             {currentTrades.collection.map(trade => (
               <TradeCard
                 key={trade.id}
@@ -37,6 +38,9 @@ class Trades extends Component {
                 trade={trade}
               />
             ))}
+            <h2 id="trades-master-h2">
+              Back to your <Link to="/portfolio">portfolio</Link>
+            </h2>
           </div>
         );
       default:
