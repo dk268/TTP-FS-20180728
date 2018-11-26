@@ -6,6 +6,7 @@ import { Login, Signup, UserHome } from './components';
 import { me } from './store';
 import Portfolio from './components/Portfolio';
 import Trades from './components/Trades';
+import About from './components/About';
 
 /**
  * COMPONENT
@@ -29,6 +30,7 @@ class Routes extends Component {
             <Route path="/home" component={UserHome} />
             <Route path="/portfolio" component={Portfolio} />
             <Route path="/trades" component={Trades} />
+            <Route path="/about" component={About} />
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}
