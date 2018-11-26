@@ -48,7 +48,13 @@ form div {
 
 #portfolio-right-div {
   background-color: lightblue;
-  height: 100%;
+  min-height: 98%;
+  display: flex;
+  flex-flow: column;
+  align-items: flex-start;
+  justify-content: space-around;
+  width: 20%;
+  padding-left: 0.5%;
 }
 
 .stocks-map-master-div {

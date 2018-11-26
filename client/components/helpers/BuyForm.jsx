@@ -18,15 +18,28 @@ class BuyForm extends Component {
       countValid: false,
       currentPrice: `n/a`,
       errorStatus: '',
+      currentCompany: '',
     };
   }
 
   handleChange = async e => {
     this.setState({ [e.target.name]: e.target.value });
     if (e.target.name === 'tradeSymbol') {
+      let currentCompany = '';
       this.state.symbolTouches++;
-      const currentPrice = await iex.stockPrice(e.target.value);
-      if (currentPrice) this.setState({ currentPrice });
+      const val = e.target.value;
+      const currentPrice = await iex.stockPrice(val);
+      currentCompany = await iex.stockCompany(val);
+      console.log(currentCompany, val, `current companye`);
+      if (currentPrice) {
+        this.setState({ currentPrice });
+      }
+      if (currentPrice && currentPrice !== `Unknown symbol`) {
+        this.setState({ currentCompany: currentCompany.companyName });
+      }
+      if (currentPrice === `Unknown symbol`) {
+        this.setState({ currentCompany: '' });
+      }
     }
   };
 
@@ -46,12 +59,12 @@ class BuyForm extends Component {
     this.setState({
       tradeSymbol: ``,
       tradeCount: 0,
-      errorStatus: res,
+      errorStatus: typeof res == 'string' ? res : '',
     });
   };
 
   render = () => {
-    console.log(this.props.currentUser);
+    console.log(`error state~`, this.state.errorStatus);
     return (
       <div id="buy-form-div">
         <form id="buy-form-form" onSubmit={this.handleSubmit}>
@@ -75,15 +88,21 @@ class BuyForm extends Component {
             onChange={this.handleChange}
             value={this.state.tradeCount}
           />
+          {this.state.currentCompany ? (
+            <h3>Company found: {this.state.currentCompany}</h3>
+          ) : (
+            <h3>Unknown symbol...</h3>
+          )}
           <h2>Current price: {this.state.currentPrice}</h2>
           <h3>Total: {this.state.currentPrice * this.state.tradeCount || 0}</h3>
           <button
             id="buy-form-submit-button"
             type="submit"
             disabled={
-              !Number.isInteger(this.state.tradeCount * 1) &&
-              this.state.tradeCount &&
-              this.state.tradeSymbol
+              !Number.isInteger(this.state.tradeCount * 1) ||
+              !this.state.tradeCount ||
+              !this.state.tradeSymbol ||
+              this.state.currentPrice === `Unknown symbol`
             }
           >
             buy!
