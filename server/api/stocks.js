@@ -8,17 +8,8 @@ module.exports = router;
 
 router.get('/', async (req, res, next) => {
   try {
-    console.log(await Stock.findAll());
     const stocks = await Stock.findAll();
-    const updatedStocks = await Promise.all(
-      stocks.map(stock =>
-        stock.update(
-          { stockPrice: currentPrice },
-          { returning: true, plain: true }
-        )
-      )
-    );
-    res.json(updatedStocks);
+    res.json(stocks);
   } catch (err) {
     next(err);
   }

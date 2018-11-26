@@ -6,11 +6,6 @@ import { addTrade } from '../../store/trades';
 
 const iex = new IEXClient(_fetch);
 
-(async () => {
-  console.log(iex.stockCompany);
-  console.log(await iex.stockCompany('AAPL'), await iex.stockCompany('aapl'));
-})();
-
 class BuyForm extends Component {
   constructor(props) {
     super(props);
@@ -21,13 +16,16 @@ class BuyForm extends Component {
       countTouches: 0,
       symbolValid: false,
       countValid: false,
+      currentPrice: `n/a`,
     };
   }
 
-  handleChange = e => {
+  handleChange = async e => {
     this.setState({ [e.target.name]: e.target.value });
     if (e.target.name === 'tradeSymbol') {
       this.state.symbolTouches++;
+      const currentPrice = await iex.stockPrice(e.target.value);
+      if (currentPrice) this.setState({ currentPrice });
     }
   };
 
@@ -39,8 +37,9 @@ class BuyForm extends Component {
     ]);
     await this.props.addTrade({
       tradeSymbol: companyInfo.symbol,
+      tradeCount: this.state.tradeCount * 1,
       tradeName: companyInfo.companyName,
-      tradePrice: companyPrice,
+      tradePrice: this.state.currentPrice,
       userId: this.props.currentUser.id,
     });
     this.setState({
@@ -50,13 +49,19 @@ class BuyForm extends Component {
   };
 
   render = () => {
+    console.log(this.state.tradeSymbol);
     return (
       <div id="buy-form-div">
         <form id="buy-form-form" onSubmit={this.handleSubmit}>
           <label htmlFor="tradeSymbol">
             <small>trade symbol</small>
           </label>
-          <input name="tradeSymbol" type="text" onChange={this.handleChange} />
+          <input
+            name="tradeSymbol"
+            type="text"
+            onChange={this.handleChange}
+            value={this.state.tradeSymbol}
+          />
           <label htmlFor="tradeCount">
             <small>number of stocks to buy</small>
           </label>
@@ -66,7 +71,10 @@ class BuyForm extends Component {
             min="0"
             step="1"
             onChange={this.handleChange}
+            value={this.state.tradeCount}
           />
+          <h2>Current price: {this.state.currentPrice}</h2>
+          <h3>Total: {this.state.currentPrice * this.state.tradeCount || 0}</h3>
           <button
             id="buy-form-submit-button"
             type="submit"

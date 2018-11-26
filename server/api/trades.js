@@ -7,7 +7,7 @@ const iex = new IEXClient(_fetch);
 
 // iex.stockCompany('AAPL').then(company => console.log(company));
 // iex.stockOpenClose('AAPL').then(company => console.log(company));
-// iex.stockPrice('AAPL').then(company => console.log(company));
+iex.stockPrice('AAPL').then(company => console.log(company));
 
 module.exports = router;
 
@@ -31,31 +31,37 @@ router.get('/:tradeId', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
+    console.log('DATA VALUES');
+    console.log(req.body);
     const currentPrice = await iex.stockPrice(req.body.tradeSymbol);
     if (!currentPrice) {
       res.status(405).send(`No such stock symbol.`);
       return `Error: symbol missing`;
     }
     if (currentPrice != req.body.tradePrice) {
-      res.status(405).send(`Price has since updated. Please try again.`);
+      res.status(407).send(`Price has since updated. Please try again.`);
       return `Error: price out of date`;
     }
+    console.log('before NEW TRADE');
     const newTrade = await Trade.create({
       ...req.body,
-      tradePrice: currentPrice,
+      tradePrice: currentPrice * 100,
     });
+    console.log('before STOCK FIND OR CREATE');
     const [updatingStock, wasCreated] = await Stock.findOrCreate({
       where: {
         userId: newTrade.userId,
         stockSymbol: newTrade.tradeSymbol,
       },
     });
+    console.log('before IF WAS CREATED');
+    console.log(updatingStock.dataValues, newTrade.tradeCount, newTrade);
     if (wasCreated) {
-      const [, updatedStock] = await updatingStock.update(
+      const updatedStock = await updatingStock.update(
         {
-          stockName: newTrade.tradeName,
-          stockCount: newTrade.tradeCount,
-          stockPrice: currentPrice,
+          stockName: newTrade.dataValues.tradeName,
+          stockCount: newTrade.dataValues.tradeCount * 1,
+          stockPrice: currentPrice * 100,
         },
         {
           returning: true,
@@ -63,10 +69,10 @@ router.post('/', async (req, res, next) => {
         }
       );
     } else {
-      const [, updatedStock] = await updatingStock.update(
+      const updatedStock = await updatingStock.update(
         {
-          stockCount: this.stockCount + newTrade.tradeCount,
-          stockPrice: currentPrice,
+          stockCount: this.stockCount + newTrade.dataValues.tradeCount,
+          stockPrice: currentPrice * 100,
         },
         { returning: true, plain: true }
       );
