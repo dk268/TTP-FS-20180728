@@ -13,6 +13,7 @@ const AuthForm = props => {
     <div>
       <form onSubmit={handleSubmit} name={name}>
         <div>
+          <h2>Sign Up; to log in, click link above</h2>
           <label htmlFor="email">
             <small>Email</small>
           </label>
@@ -28,6 +29,7 @@ const AuthForm = props => {
           ''
         ) : (
           <div>
+            <h2>Log In; to sign up, click link above</h2>
             <label htmlFor="userName">
               <small>Name</small>
             </label>
