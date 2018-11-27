@@ -14,7 +14,7 @@ const AuthForm = props => {
       <form onSubmit={handleSubmit} name={name}>
         <div>
           <h2>
-            {name === login
+            {name === `login`
               ? `Log In; to sign up, click link above`
               : `Sign Up; to log in, click link above`}
           </h2>
