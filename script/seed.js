@@ -1,35 +1,109 @@
-'use strict'
+'use strict';
 
-const db = require('../server/db')
-const {User} = require('../server/db/models')
+const db = require('../server/db');
+const { User, Trade, Stock } = require('../server/db/models');
 
 async function seed() {
-  await db.sync({force: true})
-  console.log('db synced!')
+  await db.sync({ force: true });
+  console.log('db synced!');
 
   const users = await Promise.all([
-    User.create({email: 'cody@email.com', password: '123'}),
-    User.create({email: 'murphy@email.com', password: '123'})
-  ])
+    User.create({
+      userName: 'Cody Endocrine',
+      email: 'cody@email.com',
+      password: '123',
+    }),
+    User.create({
+      userName: 'Murphy Lawson',
+      email: 'murphy@email.com',
+      password: '123',
+    }),
+  ]);
 
-  console.log(`seeded ${users.length} users`)
-  console.log(`seeded successfully`)
+  console.log(`seeded ${users.length} users`);
+
+  const trades = await Promise.all([
+    Trade.create({
+      tradeCount: 4,
+      tradeSymbol: 'SMPL1',
+      tradeName: 'Sample One',
+      tradePrice: 3400,
+      userId: 1,
+    }),
+    Trade.create({
+      tradeCount: 2,
+      tradeSymbol: 'SMPL2',
+      tradeName: 'Sample Two',
+      tradePrice: 2200,
+      userId: 1,
+    }),
+    Trade.create({
+      tradeCount: 8,
+      tradeSymbol: 'SMPL2',
+      tradeName: 'Sample Two',
+      tradePrice: 2300,
+      userId: 2,
+    }),
+    Trade.create({
+      tradeCount: 1,
+      tradeSymbol: 'SMPL3',
+      tradeName: 'Sample Three',
+      tradePrice: 120,
+      userId: 2,
+    }),
+  ]);
+
+  console.log(`seeded ${trades.length} trades`);
+
+  const stocks = await Promise.all([
+    Stock.create({
+      stockSymbol: 'SMPL1',
+      stockName: 'Sample One',
+      stockCount: 33,
+      stockPrice: 2300,
+      userId: 1,
+    }),
+    Stock.create({
+      stockSymbol: 'SMPL2',
+      stockName: 'Sample Two',
+      stockCount: 22,
+      stockPrice: 3321,
+      userId: 1,
+    }),
+    Stock.create({
+      stockSymbol: 'SMPL2',
+      stockName: 'Sample Two',
+      stockCount: 22,
+      stockPrice: 3321,
+      userId: 2,
+    }),
+    Stock.create({
+      stockSymbol: 'SMPL3',
+      stockName: 'Sample Three',
+      stockCount: 1,
+      stockPrice: 221,
+      userId: 2,
+    }),
+  ]);
+
+  console.log(`seeded ${stocks.length} stocks`);
+  console.log(`seeded successfully`);
 }
 
 // We've separated the `seed` function from the `runSeed` function.
 // This way we can isolate the error handling and exit trapping.
 // The `seed` function is concerned only with modifying the database.
 async function runSeed() {
-  console.log('seeding...')
+  console.log('seeding...');
   try {
-    await seed()
+    await seed();
   } catch (err) {
-    console.error(err)
-    process.exitCode = 1
+    console.error(err);
+    process.exitCode = 1;
   } finally {
-    console.log('closing db connection')
-    await db.close()
-    console.log('db connection closed')
+    console.log('closing db connection');
+    await db.close();
+    console.log('db connection closed');
   }
 }
 
@@ -37,8 +111,8 @@ async function runSeed() {
 // `Async` functions always return a promise, so we can use `catch` to handle
 // any errors that might occur inside of `seed`.
 if (module === require.main) {
-  runSeed()
+  runSeed();
 }
 
 // we export the seed function for testing purposes (see `./seed.spec.js`)
-module.exports = seed
+module.exports = seed;

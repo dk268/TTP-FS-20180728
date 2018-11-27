@@ -1,7 +1,7 @@
 {
-  "name": "boilermaker",
+  "name": "TTP-FS-20180728",
   "version": "1.0.0",
-  "description": "Some boilerplate code to get you started - get shakin'!",
+  "description": "TTP Fullstack assessment",
   "engines": {
     "node": ">= 7.0.0"
   },
@@ -33,7 +33,7 @@
       "git add"
     ]
   },
-  "author": "Fullstack Academy of Code",
+  "author": "Daniel Kerr; Fullstack Academy of Code",
   "license": "MIT",
   "dependencies": {
     "axios": "^0.15.3",
@@ -42,6 +42,8 @@
     "express": "^4.16.3",
     "express-session": "^1.15.1",
     "history": "^4.6.3",
+    "iex-api": "0.0.3",
+    "isomorphic-fetch": "^2.2.1",
     "morgan": "^1.8.1",
     "passport": "^0.3.2",
     "passport-google-oauth": "^1.0.0",
