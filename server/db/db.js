@@ -5,8 +5,8 @@ const databaseName =
   pkg.name + (process.env.NODE_ENV === 'test' ? '-test' : '');
 
 const db = new Sequelize(
-  process.env.DATABASE_URL ||
-    `postgres://postgres:moop@localhost:5432/${databaseName}`,
+  process.env.DATABASE_URL || `postgres://localhost:5432/${databaseName}`,
+  //if on Windows:  `postgres://postgres:moop@localhost:5432/${databaseName}`,
   //if on Mac: `postgres://localhost:5432/${databaseName}`,
   {
     logging: false,
